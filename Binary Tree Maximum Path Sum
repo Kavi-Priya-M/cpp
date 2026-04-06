@@ -1,0 +1,25 @@
+class Solution {
+    int maxSum = INT_MIN;
+
+public:
+    int maxPathSum(TreeNode* root) {
+        calculateGain(root);
+        return maxSum;
+    }
+
+private:
+    int calculateGain(TreeNode* node) {
+        if (!node) return 0;
+
+        int leftGain = max(0, calculateGain(node->left));
+        int rightGain = max(0, calculateGain(node->right));
+
+      
+        int currentPathSum = node->val + leftGain + rightGain;
+
+     
+        maxSum = max(maxSum, currentPathSum);
+
+        return node->val + max(leftGain, rightGain);
+    }
+};
