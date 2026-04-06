@@ -1,0 +1,57 @@
+class Solution {
+    unordered_map<string, int> distance;
+    unordered_map<string, vector<string>> adj;
+    vector<vector<string>> results;
+
+public:
+    vector<vector<string>> findLadders(string beginWord, string endWord, vector<string>& wordList) {
+        unordered_set<string> dict(wordList.begin(), wordList.end());
+        if (dict.find(endWord) == dict.end()) return {};
+
+
+        queue<string> q;
+        q.push(beginWord);
+        distance[beginWord] = 0;
+
+        while (!q.empty()) {
+            string curr = q.front();
+            q.pop();
+
+            string next = curr;
+            for (int i = 0; i < next.size(); i++) {
+                char oldChar = next[i];
+                for (char c = 'a'; c <= 'z'; c++) {
+                    next[i] = c;
+                    if (dict.count(next)) {
+                        if (distance.find(next) == distance.end()) {
+                            distance[next] = distance[curr] + 1;
+                            adj[curr].push_back(next);
+                            q.push(next);
+                        } else if (distance[next] == distance[curr] + 1) {
+                            adj[curr].push_back(next);
+                        }
+                    }
+                }
+                next[i] = oldChar;
+            }
+        }
+
+    
+        vector<string> path = {beginWord};
+        backtrack(beginWord, endWord, path);
+        return results;
+    }
+
+private:
+    void backtrack(string& curr, string& target, vector<string>& path) {
+        if (curr == target) {
+            results.push_back(path);
+            return;
+        }
+        for (string& neighbor : adj[curr]) {
+            path.push_back(neighbor);
+            backtrack(neighbor, target, path);
+            path.pop_back(); // Backtrack
+        }
+    }
+};
