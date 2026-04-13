@@ -1,0 +1,35 @@
+class BSTIterator {
+private:
+    stack<TreeNode*> s;
+
+    // Helper function to push all left children of a node onto the stack
+    void pushLeft(TreeNode* node) {
+        while (node) {
+            s.push(node);
+            node = node->left;
+        }
+    }
+
+public:
+    BSTIterator(TreeNode* root) {
+        // Initialize the stack with the path to the smallest element
+        pushLeft(root);
+    }
+    
+    int next() {
+        // The top of the stack is always the next smallest element
+        TreeNode* curr = s.top();
+        s.pop();
+        
+        // If the node has a right child, we need to process its left path
+        if (curr->right) {
+            pushLeft(curr->right);
+        }
+        
+        return curr->val;
+    }
+    
+    bool hasNext() {
+        return !s.empty();
+    }
+};
