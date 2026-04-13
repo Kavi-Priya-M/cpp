@@ -1,0 +1,32 @@
+class Solution {
+public:
+    ListNode *detectCycle(ListNode *head) {
+        if (!head || !head->next) return nullptr;
+
+        ListNode *slow = head;
+        ListNode *fast = head;
+
+        // Phase 1: Determine if a cycle exists
+        bool hasCycle = false;
+        while (fast && fast->next) {
+            slow = slow->next;
+            fast = fast->next->next;
+            if (slow == fast) {
+                hasCycle = true;
+                break;
+            }
+        }
+
+        // If no cycle, return null
+        if (!hasCycle) return nullptr;
+
+        // Phase 2: Find the entry point of the cycle
+        fast = head;
+        while (slow != fast) {
+            slow = slow->next;
+            fast = fast->next;
+        }
+
+        return slow; // Both pointers now point to the start of the cycle
+    }
+};
