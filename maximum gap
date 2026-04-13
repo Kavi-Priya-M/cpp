@@ -1,0 +1,36 @@
+class Solution {
+public:
+    int maximumGap(vector<int>& nums) {
+        int n = nums.size();
+        if (n < 2) return 0;
+
+        int minVal = *min_element(nums.begin(), nums.end());
+        int maxVal = *max_element(nums.begin(), nums.end());
+        if (minVal == maxVal) return 0;
+
+        // Calculate bucket size and count
+        int bucketSize = max(1, (maxVal - minVal) / (n - 1));
+        int bucketCount = (maxVal - minVal) / bucketSize + 1;
+
+        vector<int> minBuckets(bucketCount, INT_MAX);
+        vector<int> maxBuckets(bucketCount, INT_MIN);
+
+        // Put numbers into buckets
+        for (int x : nums) {
+            int idx = (x - minVal) / bucketSize;
+            minBuckets[idx] = min(minBuckets[idx], x);
+            maxBuckets[idx] = max(maxBuckets[idx], x);
+        }
+
+        // Calculate max gap between buckets
+        int maxGap = 0;
+        int prevMax = minVal;
+        for (int i = 0; i < bucketCount; i++) {
+            if (minBuckets[i] == INT_MAX) continue; // Skip empty buckets
+            maxGap = max(maxGap, minBuckets[i] - prevMax);
+            prevMax = maxBuckets[i];
+        }
+
+        return maxGap;
+    }
+};
