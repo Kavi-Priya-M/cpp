@@ -1,0 +1,43 @@
+class Solution {
+public:
+    int maxPoints(vector<vector<int>>& points) {
+        int n = points.size();
+        if (n <= 2) return n;
+        
+        int result = 0;
+        
+        for (int i = 0; i < n; i++) {
+            unordered_map<string, int> counts;
+            int local_max = 0;
+            
+            for (int j = i + 1; j < n; j++) {
+                int dx = points[j][0] - points[i][0];
+                int dy = points[j][1] - points[i][1];
+                
+                // Simplify the slope using GCD
+                int common = gcd(dx, dy);
+                dx /= common;
+                dy /= common;
+                
+                // Create a unique string key for the slope "dy/dx"
+                string slope = to_string(dy) + "/" + to_string(dx);
+                counts[slope]++;
+                local_max = max(local_max, counts[slope]);
+            }
+            // Add 1 to include the starting point i itself
+            result = max(result, local_max + 1);
+        }
+        
+        return result;
+    }
+
+private:
+    // Helper to find GCD
+    int gcd(int a, int b) {
+        while (b) {
+            a %= b;
+            swap(a, b);
+        }
+        return a;
+    }
+};
