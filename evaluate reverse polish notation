@@ -1,0 +1,22 @@
+class Solution {
+public:
+    int evalRPN(vector<string>& tokens) {
+        stack<long> s; // Use long to prevent overflow during intermediate steps
+
+        for (const string& t : tokens) {
+            if (t == "+" || t == "-" || t == "*" || t == "/") {
+                long b = s.top(); s.pop();
+                long a = s.top(); s.pop();
+                
+                if (t == "+") s.push(a + b);
+                else if (t == "-") s.push(a - b);
+                else if (t == "*") s.push(a * b);
+                else if (t == "/") s.push(a / b);
+            } else {
+                // Token is a number string, convert to long
+                s.push(stol(t));
+            }
+        }
+        return (int)s.top();
+    }
+};
