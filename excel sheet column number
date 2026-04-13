@@ -1,0 +1,16 @@
+class Solution {
+public:
+    int titleToNumber(string columnTitle) {
+        long result = 0; // Use long to prevent overflow during calculation
+        
+        for (char c : columnTitle) {
+            // Convert character to its 1-based value (A=1, B=2, ...)
+            int val = c - 'A' + 1;
+            
+            // Standard base conversion: shift existing total and add new value
+            result = result * 26 + val;
+        }
+        
+        return (int)result;
+    }
+};
