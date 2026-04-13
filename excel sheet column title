@@ -1,0 +1,22 @@
+class Solution {
+public:
+    string convertToTitle(int columnNumber) {
+        string res = "";
+        
+        while (columnNumber > 0) {
+            // Shift to 0-indexed to handle the 'Z' case correctly
+            columnNumber--;
+            
+            // Get the current character ('A' + remainder)
+            char c = 'A' + (columnNumber % 26);
+            res += c;
+            
+            // Move to the next "digit"
+            columnNumber /= 26;
+        }
+        
+        // Since we appended characters from right to left, reverse the result
+        reverse(res.begin(), res.end());
+        return res;
+    }
+};
