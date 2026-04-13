@@ -1,0 +1,25 @@
+class Solution {
+public:
+    int findPeakElement(vector<int>& nums) {
+        int left = 0;
+        int right = nums.size() - 1;
+
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+
+            // If mid is less than the next element, we are on an upward slope.
+            // The peak must be to the right (including mid + 1).
+            if (nums[mid] < nums[mid + 1]) {
+                left = mid + 1;
+            } 
+            // If mid is greater than the next element, we are on a downward slope.
+            // The peak is either mid itself or to the left.
+            else {
+                right = mid;
+            }
+        }
+
+        // Left and right will eventually meet at a peak index.
+        return left;
+    }
+};
