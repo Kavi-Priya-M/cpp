@@ -1,0 +1,30 @@
+class Solution {
+public:
+    unordered_map<string, vector<string>> memo;
+
+    vector<string> wordBreak(string s, vector<string>& wordDict) {
+        // Use a set for O(1) lookup, but only create it once
+        unordered_set<string> dict(wordDict.begin(), wordDict.end());
+        return backtrack(s, dict);
+    }
+
+    vector<string> backtrack(string s, unordered_set<string>& dict) {
+        if (memo.count(s)) return memo[s];
+        if (s.empty()) return {""};
+
+        vector<string> result;
+
+        for (int i = 1; i <= s.length(); i++) {
+            string word = s.substr(0, i);
+            
+            if (dict.count(word)) {
+                vector<string> rest = backtrack(s.substr(i), dict);
+                for (const string& str : rest) {
+                    result.push_back(word + (str.empty() ? "" : " ") + str);
+                }
+            }
+        }
+
+        return memo[s] = result;
+    }
+};
