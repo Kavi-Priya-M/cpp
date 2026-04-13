@@ -1,0 +1,41 @@
+class Solution {
+public:
+    string fractionToDecimal(int numerator, int denominator) {
+        if (numerator == 0) return "0";
+
+        string res = "";
+        // Handle negative numbers: if one is negative, the result is negative
+        if ((numerator < 0) ^ (denominator < 0)) res += "-";
+
+        // Use long long to prevent overflow (e.g., -2147483648 / -1)
+        long long num = abs((long long)numerator);
+        long long den = abs((long long)denominator);
+
+        // 1. Integral part
+        res += to_string(num / den);
+        long long rem = num % den;
+        if (rem == 0) return res;
+
+        // 2. Fractional part
+        res += ".";
+        unordered_map<long long, int> m; // Remainder -> Position in string
+
+        while (rem != 0) {
+            // If we've seen this remainder before, we found a loop
+            if (m.count(rem)) {
+                res.insert(m[rem], "(");
+                res += ")";
+                break;
+            }
+
+            // Store the position of the current remainder
+            m[rem] = res.length();
+
+            rem *= 10;
+            res += to_string(rem / den);
+            rem %= den;
+        }
+
+        return res;
+    }
+};
