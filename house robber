@@ -1,0 +1,23 @@
+class Solution {
+public:
+    int rob(vector<int>& nums) {
+        int n = nums.size();
+        if (n == 0) return 0;
+        if (n == 1) return nums[0];
+
+        
+        int rob_prev2 = 0;
+        int rob_prev1 = 0;
+
+        for (int current_house_money : nums) {
+            
+            int current_max = max(rob_prev2 + current_house_money, rob_prev1);
+            
+            // Move our pointers forward
+            rob_prev2 = rob_prev1;
+            rob_prev1 = current_max;
+        }
+
+        return rob_prev1;
+    }
+};
